@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                <a aria-hidden="true">&times;;</a>
+            </button>
+        </div>
+        
+    {% endfor %}
+
+
+    {% if id %}
+        <h1>Hello {{ id }}</h1>
+        <br/>
+        {% for our_estudiantes in our_estudiante %}
+            {{ our_estudiantes.id }}. {{ our_estudiantes.DNI }} - {{ our_estudiantes.apellidos }} - {{ our_estudiantes.nombres}} - {{ our_estudiantes.feNacimiento}} - {{ our_estudiantes.sexo}} - {{ our_estudiantes.codEscuela}} <br/>
+        {% endfor %}
+    {% else %}
+        <h1>Agregar Estudiante</h1>
+        <br/>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            {{ form.DNI.label(class="form-label") }}
+            {{ form.DNI(class="form-control") }}
+            <br/>
+            {{ form.apellidos.label(class="form-label") }}
+            {{ form.apellidos(class="form-control") }}
+            <br/>
+            {{ form.nombres.label(class="form-label") }}
+            {{ form.nombres(class="form-control") }}
+            <br/>
+            <!-- <label for="">Fecha Nacimiento</label>
+            <input type="date" class="form-control" name="feNacimiento" required> -->
+
+            <label for="basic-url" class="form-label">Fecha Nacimiento</label>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon3">Ingresa la fecha de nacimiento:</span>
+                <input type="date" class="form-control" id="basic-url" name="feNacimiento" aria-describedby="basic-addon3">
+            </div>
+
+            <!-- {{ form.feNacimiento(class="form-control") }} -->
+            <br/>
+            {{ form.sexo.label(class="form-label") }}
+
+            <select class="form-select" name="sexo" aaria-label=".form-select-lg example" required>
+                <option selected></option>
+                <option value="M">Masculino</option>
+                <option value="F">Femenino</option>
+                <option value="Personalisado">Personalisado</option>
+            </select>
+
+
+
+            <!-- {{ form.sexo(class="form-control") }} -->
+            <br/>
+            <label for="">Carrera Profecional</label>
+            <!-- {{ form.codEscuela(class="form-control") }} -->
+
+            <select class="form-select" name="codEscuela" aaria-label=".form-select-lg example" required>
+                <option selected></option>
+                {% for escuela in escu %}
+                 <option value="{{escuela.codigo}}">{{escuela.nombre}}</option>
+                {% endfor %}
+            </select>
+
+
+            <br/>
+            <button type="submit" class="btn btn-success">Guardar</button>
+        </form>
+
+        <br/>
+        <table class="table table-striped table-dark">
+            <thead>
+              <tr>
+                <th scope="col" class="table-warning">id</th>
+                <th scope="col" class="table-warning">DNI</th>
+                <th scope="col" class="table-warning">Apellidos</th>
+                <th scope="col" class="table-warning">Nombre</th>
+                <th scope="col" class="table-warning">Fecha Nacimiento</th>
+                <th scope="col" class="table-warning">Sexo</th>
+                <th scope="col" class="table-warning">CodEscuela</th>
+                <th scope="col" class="table-warning">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for our_estudiantes in our_estudiante %}
+              <tr>
+                <th scope="row">{{ our_estudiantes.id }}</th>
+                <td>{{ our_estudiantes.DNI }}</td>
+                <td>{{ our_estudiantes.apellidos }}</td>
+                <td>{{ our_estudiantes.nombres }}</td>
+                <td>{{ our_estudiantes.feNacimiento }}</td>
+                <td>{{ our_estudiantes.sexo }}</td>
+                <td>{{ our_estudiantes.codEscuela }}</td>
+                <td>
+                    <a class="btn btn-primary" href="{{ url_for('update_estudiante', id=our_estudiantes.id) }}">Editar</a>
+                    <a class="btn btn-danger" href="{{ url_for('delete_estudiante', id =our_estudiantes.id) }}">Eliminar</a>
+                    <br>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <!--JacK-->
+
+
+
+
+    {% endif %}
+{% endblock %}
